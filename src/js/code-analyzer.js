@@ -4,25 +4,19 @@ import escodegen from 'escodegen';
 const parseCode = (codeToParse) => {
     return esprima.parseScript(codeToParse, {loc: true});
 };
+function makeTableHTML(myArray) {
+    var result = '<table border=1>';
+    result += '<tr bgcolor = \'#c7d0dd\'><td>lines</td><td>type</td><td>name</td><td>condition</td><td>value</td></tr>';
+    for(var i=0; i<myArray.length; i++) {
+        result += '<tr>';
+        for(var j=0; j<myArray[i].length; j++){
+            result += '<td>'+myArray[i][j]+'</td>';
+        }
+        result += '</tr>';
+    }
+    result += '</table>';
 
-function createTable(tableData) {
-    var table = document.createElement('table');
-    table.border = 1; table.style = 'width:100%';
-    var tableBody = document.createElement('tbody');
-    var firstRow = document.createElement('tr'); firstRow.bgColor = '#c7d0dd';
-    var cell1 = document.createElement('td'); cell1.appendChild(document.createTextNode('lines'));
-    var cell2 = document.createElement('td'); cell2.appendChild(document.createTextNode('type'));
-    var cell3 = document.createElement('td'); cell3.appendChild(document.createTextNode('name'));
-    var cell4 = document.createElement('td'); cell4.appendChild(document.createTextNode('condition'));
-    var cell5 = document.createElement('td'); cell5.appendChild(document.createTextNode('value'));
-    firstRow.appendChild(cell1); firstRow.appendChild(cell2); firstRow.appendChild(cell3); firstRow.appendChild(cell4); firstRow.appendChild(cell5);
-    tableBody.appendChild(firstRow);
-    tableData.forEach(function(rowData) {
-        var row = document.createElement('tr');
-        rowData.forEach(function(cellData) { var cell = document.createElement('td'); cell.appendChild(document.createTextNode(cellData)); row.appendChild(cell); });
-        tableBody.appendChild(row);
-    });
-    table.appendChild(tableBody); document.getElementById('htmlCode').appendChild(table);
+    return result;
 }
 
 function ParseFunctionDecl(parsedCodeBody,result){
@@ -155,4 +149,4 @@ function ParseTable(parsedCode, result) {
 }
 
 
-export {parseCode, ParseTable, createTable};
+export {parseCode, ParseTable, makeTableHTML};

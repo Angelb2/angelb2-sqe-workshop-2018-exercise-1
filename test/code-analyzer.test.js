@@ -1,5 +1,5 @@
 import assert from 'assert';
-import {ParseTable, parseCode, createTable} from '../src/js/code-analyzer';
+import {ParseTable, parseCode, makeTableHTML} from '../src/js/code-analyzer';
 
 
 describe('The javascript parser', () => {
@@ -126,14 +126,15 @@ describe('The statements parser', () => {
         );
     });
 });
-/*
+
 describe('The table creator', () => {
     it('is creating a table correctly', () => {
-        let jsonString = createTable(['test1','test2'],['test3','test4']);
+        let tableString = makeTableHTML([['test1','test2','test3','test4','test5'],['test2-1','test2-2','test2-3','test2-4','test2-5']]);
         assert.deepEqual(
-            jsonString,
-            ' <table>' +'<tr>' + '<td>' + '</td>' + '</tr>' + '</table>'
+            tableString,
+            '<table border=1><tr bgcolor = \'#c7d0dd\'><td>lines</td><td>type</td><td>name</td><td>condition</td><td>value</td></tr>'+
+            '<tr><td>test1</td><td>test2</td><td>test3</td><td>test4</td><td>test5</td></tr>'+
+            '<tr><td>test2-1</td><td>test2-2</td><td>test2-3</td><td>test2-4</td><td>test2-5</td></tr></table>'
         );
     });
 });
-*/
