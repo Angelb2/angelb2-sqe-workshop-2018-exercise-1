@@ -1,5 +1,5 @@
 import assert from 'assert';
-import {ParseTable,parseCode} from '../src/js/code-analyzer';
+import {ParseTable, parseCode, createTable} from '../src/js/code-analyzer';
 
 
 describe('The javascript parser', () => {
@@ -39,6 +39,52 @@ describe('The expressions parser', () => {
     });
 });
 
+describe('The functions parser', () => {
+    it('is parsing functions correctly', () => {
+        let jsonString = parseCode('function funcName(X){}');
+        let output = ParseTable(jsonString,[]);
+        assert.deepEqual(
+            output,
+            [['1 to 1','function declaration','funcName','',''],['1 to 1','variable declaration','X','','']]
+        );
+    });
+});
+
+describe('The else if parser', () => {
+    it('is parsing else if correctly', () => {
+        let jsonString = parseCode( 'function funcName(i){\n' +
+                                    '     if(i < 5)\n' +
+                                    '          return 5;\n' +
+                                    '     else if(i > 0)\n' +
+                                    '          return 0;\n' +
+                                    '     else if(i > -4)\n' +
+                                    '          return -4;\n' +
+                                    '     else\n' +
+                                    '          return -1;\n' +
+                                    '}');
+        let output = ParseTable(jsonString,[]);
+        assert.deepEqual(
+            output,
+            [['1 to 10','function declaration','funcName','',''],['1 to 10','variable declaration','i','',''],['2 to 9','if statement','','i < 5',''],['3 to 3','return statement','','','5'],['4 to 9','else if statement','','i > 0',''],['5 to 5','return statement','','','0'],['6 to 9','else if statement','','i > -4',''],['7 to 7','return statement','','','-4'],['...','else statement','','',''],['9 to 9','return statement','','','-1']]
+        );
+    });
+});
+
+describe('The for loops parser', () => {
+    it('is parsing for loops correctly', () => {
+        let jsonString = parseCode( 'function funcName(i){\n' +
+                                    '     for(i = 0;i <= i;i++){\n' +
+                                    '           return -1;\n' +
+                                    '     }\n' +
+                                    '}');
+        let output = ParseTable(jsonString,[]);
+        assert.deepEqual(
+            output,
+            [['1 to 5','function declaration','funcName','',''],['1 to 5','variable declaration','i','',''],['2 to 4','for statement','','i = 0;i <= i;i++',''],['3 to 3','return statement','','','-1']]
+        );
+    });
+});
+
 describe('The statements parser', () => {
     it('is parsing while statements correctly', () => {
         let jsonString = parseCode('while (low <= high) {\n' +
@@ -64,6 +110,7 @@ describe('The statements parser', () => {
         );
     });
 });
+
 describe('The statements parser', () => {
     it('is parsing if statements correctly', () => {
         let jsonString = parseCode('function funcName(){\n' +
@@ -79,3 +126,14 @@ describe('The statements parser', () => {
         );
     });
 });
+/*
+describe('The table creator', () => {
+    it('is creating a table correctly', () => {
+        let jsonString = createTable(['test1','test2'],['test3','test4']);
+        assert.deepEqual(
+            jsonString,
+            ' <table>' +'<tr>' + '<td>' + '</td>' + '</tr>' + '</table>'
+        );
+    });
+});
+*/
